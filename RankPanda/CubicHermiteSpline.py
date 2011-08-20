@@ -182,6 +182,7 @@ class SplineGenerator:
     # and slope at that value.
     # Note: Not designed for repeated use in real time, because the finding of
     # the t value recurses a recursive method until it's found.
+    # Only accurate to 1 decimal place (a tenth of a step)
     @classmethod
     def GetInformationAtLengthFraction(cls, splineList, lengthFraction):
         lengths = SplineGenerator.GetLengths(splineList)
