@@ -24,7 +24,9 @@ class SplineGenerator:
     # This calculated what the slopes at the points should be for the splines.
     # The method we use simply draws a straight line between the point before
     # and the point after, and this becomes the slope of the point.
+    # It returns the slope at the middle point, which cannot be None (exception should be thrown)
     # Note that the slopes are dx/dt and dy/dt, not dx/dy.
+    # Note that t always ranges between 0 and 1 from point to point.
     @classmethod
     def _GetSlope(cls, PointTriple):
         p0 = PointTriple[0]
@@ -51,7 +53,7 @@ class SplineGenerator:
     # The main splining method.  Takes in a list of points and their slopes,
     # and calculates the splines connecting them.  Farily straightforward, once
     # you know how it works, as described above.
-    # Note that is any slope is None, it'll automatically be calculated.
+    # Note that if any slope is None, it'll automatically be calculated.
     # This should often be the case, except when doing something like
     # intermediate DTP locations or something.
     # A given spline is stored as a list of four elements:
@@ -66,7 +68,7 @@ class SplineGenerator:
         while (i < l):
             if (oldSlopeList[i] is None):
                 if (i == 0):
-                  slopeList.append(SplineGenerator._GetSlope([None, pointList[0], pointList[1]]))
+                    slopeList.append(SplineGenerator._GetSlope([None, pointList[0], pointList[1]]))
                 elif (i == (l - 1)):
                     slopeList.append(SplineGenerator._GetSlope([pointList[i - 1], pointList[i], None]))
                 else:
@@ -97,6 +99,8 @@ class SplineGenerator:
     # from the midpoint to point 1.  If the sum of these two lengths is close
     # to the length of the first one, return the length.  If not, recurse
     # and add the lengths together.
+    # Doing this analytically isn't possible in the general case, I believe (requires finding the integral of the square root of a quartic function)
+    # Doing the integral numerically would probably be even more computationally intensive
     @classmethod
     def GetLength(cls, fnList, tol):
         return SplineGenerator._GetLengthHelper(fnList, 0, 1, tol)
@@ -139,7 +143,8 @@ class SplineGenerator:
     # Increase the value of NUMBERPERSTEP to draw more points.  Decrease to draw fewer.
     # I return a list of lists - each inner list contains all the points to be
     # drawn.
-
+    # TODO: make NUMBERPERSTEP a class variable so that we can change it
+    # TODO: make the number of points we return deterministic (it have a counter that counts up to total, instead of using t <= 1 as the loop guard)
     @classmethod
     def GetPoints(cls, splineList):
         NUMBERPERSTEP = 8
@@ -171,10 +176,10 @@ class SplineGenerator:
     # The index is which spline part the point in question lies along.
 
     # First, I get the lengths of each spline part.  I then go through and find
-    # the total lenght along the splines needed, and find which spline part the
+    # the total length along the splines needed, and find which spline part the
     # fraction will lie on.
     # I then find the t value at which we need, and then just find the point
-    # and slope at tha t value.
+    # and slope at that value.
     # Note: Not designed for repeated use in real time, because the finding of
     # the t value recurses a recursive method until it's found.
     @classmethod
