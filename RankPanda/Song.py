@@ -40,7 +40,7 @@ class Song(object):
     # Resets the entire index to be the default.
     def ResetCountsPerMeasure(self, defaultCountsPerMeasure):
         self._countsPerMeasureIndex = dict()
-        self._countsPerMeasureIndex[1] = defualtCountsPerMeasure
+        self._countsPerMeasureIndex[1] = defaultCountsPerMeasure
 
     def ResetStepsPerCount(self):
         self._stepsPerCountIndex = dict()
@@ -60,10 +60,10 @@ class Song(object):
     def GetTitle(self):
         return self.title
 
-    def GetCountsPerMeasureIndex():
+    def GetCountsPerMeasureIndex(self):
         return self._countsPerMeasureIndex
 
-    def GetStepsPerCountIndex():
+    def GetStepsPerCountIndex(self):
         return self._stepsPerCountIndex
 
     def GetCurrentMove(self):

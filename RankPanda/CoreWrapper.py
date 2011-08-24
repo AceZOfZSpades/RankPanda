@@ -154,7 +154,7 @@ class CoreWrapper(object):
 
     def SetListOfSelectedCommandNumbers(self, commandNumberList):
         if (self._song.currentMove is None):
-            return curList
+            return
         allSelectedRanks = self._song.currentMove.GetSelectedRanks()
         i = 0
         while (i < len(allSelectedRanks)):
@@ -1120,7 +1120,7 @@ class CoreWrapper(object):
     # stepsPerMeasureList is of the form [(MeasureNumber, StepsPerCountValue)]
     def GetLists(self):
         countsPerMeasureItems = self._song.GetCountsPerMeasureIndex().items()
-        stepsPerMeasureItems = self._song.GetStepsPerCountIndex().items()
+        stepsPerCountItems = self._song.GetStepsPerCountIndex().items()
         curList1 = []
         i = 0
         while (i < len(countsPerMeasureItems)):
@@ -1129,7 +1129,7 @@ class CoreWrapper(object):
         curList2 = []
         i = 0
         while (i < len(stepsPerCountItems)):
-            curList2.append(stepsPerCountIndex[i][0], stepsPerCountIndex[i][1])
+            curList2.append(stepsPerCountItems[i][0], stepsPerCountItems[i][1])
             i = i + 1
         return (curList1, curList2)
 
@@ -1140,29 +1140,29 @@ class CoreWrapper(object):
 
     # Change the basic info for a song.  Pass in the same thing you would for making a new song.  Should retain all the old move info, etc.
     def EditSongInfo(self, newTitle, newNumberMeasures, newCountsPerMeasureList, newStepsPerCountList):
-        if (numberMeasures < 1):
+        if (newNumberMeasures < 1):
             raise NameError("Number of measures can't be less than 1!")
-        if (len(CountsPerMeasureList) == 0):
+        if (len(newCountsPerMeasureList) == 0):
             raise NameError("You must input the initial number of counts per measure!")
-        if (CountsPerMeasureList[0][0] != 1):
+        if (newCountsPerMeasureList[0][0] != 1):
             raise NameError("You must input the initial number of counts per measure!")
         self._song.SetTitle(newTitle)
         self._song.SetNumberMeasures(newNumberMeasures)
         self._song.ResetCountsPerMeasure(newCountsPerMeasureList[0][1])
         self._song.ResetStepsPerCount()
         i = 1
-        while (i < len(CountsPerMeasureList)):
-            if (CountsPerMeasureList[i][0] < 1):
+        while (i < len(newCountsPerMeasureList)):
+            if (newCountsPerMeasureList[i][0] < 1):
                 raise NameError("Measure number can't be less than 1!")
-            if (CountsPerMeasureList[i][1] < 0):
+            if (newCountsPerMeasureList[i][1] < 0):
                 raise NameError("Counts per Measure can't be less than 0!")
             self._song.AddCountsPerMeasureChange(newCountsPerMeasureList[i][0], newCountsPerMeasureList[i][1])
             i = i + 1
         i = 0
-        while (i < len(StepsPerCountList)):
-            if (StepsPerCountList[i][0] < 1):
+        while (i < len(newStepsPerCountList)):
+            if (newStepsPerCountList[i][0] < 1):
                 raise NameError("Measure number can't be less than 1!")
-            if (StepsPerCountList[i][1] < 0):
+            if (newStepsPerCountList[i][1] < 0):
                 raise NameError("Steps per Count can't be less than 0!")
             self._song.AddStepsPerCountChange(newStepsPerCountList[i][0], newStepsPerCountList[i][1])
             i = i + 1

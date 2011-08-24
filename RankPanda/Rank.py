@@ -418,7 +418,7 @@ class Rank(object):
         if ((len(self._commandList)) > firstCommandNumber + 1):
             return
         firstCommand = self._commandList[firstCommandNumber]
-        secondCommand = self._commandList[secondCommandNumber]
+        secondCommand = self._commandList[firstCommandNumber + 1]
         newCommand = firstCommand.MergeWithFollowing(secondCommand)
         if (newCommand is not None):
             self._commandList.pop(firstCommandNumber)

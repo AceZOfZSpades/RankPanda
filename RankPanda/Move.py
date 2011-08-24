@@ -1,6 +1,7 @@
 import RankIDGen
 import Rank
 import pprint
+import Commands
 
 
 class Move(object):
@@ -233,7 +234,7 @@ class Move(object):
                         oldoldRank = priorprior.LookUpName(name)
                         if (oldoldRank is not None):
                             commandList = rank.GetCommantList()
-                            commandList.append(Command.MarkTime(self._length, rank.GetEndLocation()))
+                            commandList.append(Commands.MarkTime(self._length, rank.GetEndLocation()))
                             newRank.SetCommandList(commandList)
                     if (following is not None):
                         followingRank = following.LookUpName(name)
